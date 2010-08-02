@@ -36,14 +36,8 @@ public class ReflectUtils
      */
     public static Method getZeroArgMethod(Class cls, String methodName)
     {
-        if(null == cls)
-        {
-            throw new IllegalArgumentException("cls cannot be null");
-        }
-        if(null == methodName)
-        {
-            throw new IllegalArgumentException("methodName cannot be null");
-        }
+        Assert.notNull(cls, "cls cannot be null");
+        Assert.notNull(methodName, "methodName cannot be null");
         
         // First check for method using getMethod()
         Method method = null;
