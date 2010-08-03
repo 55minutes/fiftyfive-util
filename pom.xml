@@ -97,6 +97,32 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <version>1.7.0</version>
+        <configuration>
+          <header>${basedir}/etc/header.txt</header>
+          <failIfMissing>true</failIfMissing>
+          <properties>
+            <year>2010</year>
+          </properties>
+          <useDefaultExcludes>true</useDefaultExcludes>
+          <includes>
+            <include>pom.xml</include>
+            <include>src/**</include>
+          </includes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>check-headers</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
@@ -181,6 +207,7 @@
           <links>
             <link>http://java.sun.com/javase/6/docs/api/</link>
           </links>
+          <stylesheetfile>${basedir}/etc/javadoc/stylesheets/screen.css</stylesheetfile>
         </configuration>
       </plugin>
     </plugins>
