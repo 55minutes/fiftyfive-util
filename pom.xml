@@ -110,7 +110,7 @@
       <plugin>
         <groupId>com.mycila.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
-        <version>1.7.0</version>
+        <version>1.8.0</version>
         <configuration>
           <header>${basedir}/etc/header.txt</header>
           <failIfMissing>true</failIfMissing>
