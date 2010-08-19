@@ -80,11 +80,10 @@ public class ReflectUtils
     public static Object invokeZeroArgMethod(Object bean, String methodName)
     {
         Method method = getZeroArgMethod(bean.getClass(), methodName);
-        
-        if(!Modifier.isPublic(method.getModifiers()))
-        {
-            method.setAccessible(true);
-        }
+
+        // Ensure we can invoke even if method or class is not public
+        method.setAccessible(true);
+
         Throwable cause = null;
         try
         {
