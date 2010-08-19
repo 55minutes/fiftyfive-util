@@ -24,69 +24,74 @@ public class ReflectUtilsTest
     @Test
     public void testInvokeZeroArgMethod()
     {
-        Assert.assertNull(ReflectUtils.invokeZeroArgMethod(this, "voidMethod"));
+        Bean bean = new Bean();
+        
+        Assert.assertNull(ReflectUtils.invokeZeroArgMethod(bean, "voidMethod"));
         Assert.assertEquals(
             "public",
-            ReflectUtils.invokeZeroArgMethod(this, "publicMethod")
+            ReflectUtils.invokeZeroArgMethod(bean, "publicMethod")
         );
         Assert.assertEquals(
             "protected",
-            ReflectUtils.invokeZeroArgMethod(this, "protectedMethod")
+            ReflectUtils.invokeZeroArgMethod(bean, "protectedMethod")
         );
         Assert.assertEquals(
             "private",
-            ReflectUtils.invokeZeroArgMethod(this, "privateMethod")
+            ReflectUtils.invokeZeroArgMethod(bean, "privateMethod")
         );
         Assert.assertEquals(
             "default",
-            ReflectUtils.invokeZeroArgMethod(this, "defaultMethod")
+            ReflectUtils.invokeZeroArgMethod(bean, "defaultMethod")
         );
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testInvokeZeroArgMethod_arg()
     {
-        ReflectUtils.invokeZeroArgMethod(this, "methodWithArg");
+        ReflectUtils.invokeZeroArgMethod(new Bean(), "methodWithArg");
     }
     
     @Test(expected=TestException.class)
     public void testInvokeZeroArgMethod_exception()
     {
-        ReflectUtils.invokeZeroArgMethod(this, "exceptionalMethod");
+        ReflectUtils.invokeZeroArgMethod(new Bean(), "exceptionalMethod");
     }
 
-    public void voidMethod()
+    private static class Bean
     {
-    }
+        public void voidMethod()
+        {
+        }
     
-    public String publicMethod()
-    {
-        return "public";
-    }
+        public String publicMethod()
+        {
+            return "public";
+        }
     
-    protected String protectedMethod()
-    {
-        return "protected";
-    }
+        protected String protectedMethod()
+        {
+            return "protected";
+        }
     
-    private String privateMethod()
-    {
-        return "private";
-    }
+        private String privateMethod()
+        {
+            return "private";
+        }
     
-    String defaultMethod()
-    {
-        return "default";
-    }
+        String defaultMethod()
+        {
+            return "default";
+        }
     
-    public String methodWithArg(String arg)
-    {
-        return "arg";
-    }
+        public String methodWithArg(String arg)
+        {
+            return "arg";
+        }
     
-    public void exceptionalMethod()
-    {
-        throw new TestException();
+        public void exceptionalMethod()
+        {
+            throw new TestException();
+        }
     }
     
     private static class TestException extends RuntimeException
