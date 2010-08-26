@@ -19,12 +19,9 @@ package fiftyfive.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Truncates strings using a configurable set of rules. For a reasonable
- * default ruleset, just use the empty constructor:
+ * default ruleset, use the empty constructor:
  * <pre>
  * String s = "My really long string that needs to be cut down to size.";
  * new TruncateHelper().truncate(s, 50); // "My really long string that needs to be cut down…"
@@ -32,10 +29,6 @@ import org.slf4j.LoggerFactory;
  */
 public class TruncateHelper
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(
-        TruncateHelper.class
-    );
-    
     private String _suffix = "…";
     private boolean _trimFirst = true;
     private boolean _compressWhiteSpace = true;
@@ -67,21 +60,99 @@ public class TruncateHelper
             return string;
         }
         
+        int maxCapture = maxLength - 1 - _suffix.length();
+        int minCapture = maxCapture - _breakWordLongerThan;
+        if(minCapture < 0 || minCapture >= maxCapture)
+        {
+            minCapture = 0;
+        }
+        
         Pattern patt = Pattern.compile(String.format(
             "(?s)^%s(.{%d,%d}%s)%s.*",
             _trimFirst ? "\\s*" : "",
-            maxLength - 1 - _breakWordLongerThan - _suffix.length(),
-            maxLength - 1 - _suffix.length(),
+            minCapture,
+            maxCapture,
             _wordPattern,
             _wordDelimeterPattern
         ));
-        LOGGER.debug("Pattern is {}", patt);
         Matcher match = patt.matcher(string);
         if(match.matches())
         {
             return string.substring(0, match.end(1)) + _suffix;
         }
-        LOGGER.debug("Pattern did not match");
         return string.substring(0, maxLength - 1) + _suffix;
+    }
+    
+    // Properties
+    
+    public String getSuffix()
+    {
+        return _suffix;
+    }
+
+    public TruncateHelper setSuffix(String suffix)
+    {
+        // Treat null as empty string
+        if(null == suffix) suffix = "";
+        
+        this._suffix = suffix;
+        return this;
+    }
+    
+    public boolean getTrimFirst()
+    {
+        return _trimFirst;
+    }
+
+    public TruncateHelper setTrimFirst(boolean trimFirst)
+    {
+        this._trimFirst = trimFirst;
+        return this;
+    }
+    
+    public boolean getCompressWhiteSpace()
+    {
+        return _compressWhiteSpace;
+    }
+
+    public TruncateHelper setCompressWhiteSpace(boolean compressWhiteSpace)
+    {
+        this._compressWhiteSpace = compressWhiteSpace;
+        return this;
+    }
+    
+    public int getBreakWordLongerThan()
+    {
+        return _breakWordLongerThan;
+    }
+
+    public TruncateHelper setBreakWordLongerThan(int breakWordLongerThan)
+    {
+        this._breakWordLongerThan = breakWordLongerThan;
+        return this;
+    }
+    
+    public Pattern getWordPattern()
+    {
+        return _wordPattern;
+    }
+
+    public TruncateHelper setWordPattern(Pattern wordPattern)
+    {
+        Assert.notNull(wordPattern);
+        this._wordPattern = wordPattern;
+        return this;
+    }
+    
+    public Pattern getWordDelimeterPattern()
+    {
+        return _wordDelimeterPattern;
+    }
+
+    public TruncateHelper setWordDelimeterPattern(Pattern wordDelimeterPattern)
+    {
+        Assert.notNull(wordDelimeterPattern);
+        this._wordDelimeterPattern = wordDelimeterPattern;
+        return this;
     }
 }
