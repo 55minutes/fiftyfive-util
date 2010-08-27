@@ -27,6 +27,21 @@ package fiftyfive.util;
 public class Assert
 {
     /**
+     * Asserts that the given condition is {@code true}.
+     * 
+     * @throws IllegalArgumentException with {@code message} if
+     *         {@code condition} is {@code false}.
+     */
+    public static void isTrue(boolean condition, String message)
+        throws IllegalArgumentException
+    {
+        if(!condition)
+        {
+            throw new IllegalArgumentException(message);
+        }
+    }
+    
+    /**
      * Asserts that the given object is not {@code null}.
      * 
      * @throws IllegalArgumentException with the message
