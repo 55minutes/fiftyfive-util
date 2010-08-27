@@ -23,9 +23,10 @@ import java.util.regex.Pattern;
  * Truncates strings using a configurable set of rules. For a reasonable
  * default ruleset, use the empty constructor:
  * <pre>
- * String s = "My really long string that needs to be cut down to size.";
- * new TruncateHelper().truncate(s, 50); // "My really long string that needs to be cut down…"
+ * new TruncateHelper().truncate("My really long string that needs to be cut down to size.", 50);
+ * // Result: "My really long string that needs to be cut down…"
  * </pre>
+ * @see #truncate
  */
 public class TruncateHelper
 {
@@ -36,11 +37,61 @@ public class TruncateHelper
     private Pattern _wordPattern = Pattern.compile("[^\\s\\-–—]");
     private Pattern _wordDelimeterPattern = Pattern.compile("[\\s\\-–—]");
     
+    /**
+     * Constructs a TruncateHelper with a reasonable set of defaults:
+     * <pre>
+     * suffix = "…"
+     * trimFirst = true
+     * compressWhiteSpace = true
+     * breakWordLongerThan = 10
+     * wordPattern = [^\s\-–—]
+     * wordDelimeterPattern = [\s\-–—]
+     * </pre>
+     */
     public TruncateHelper()
     {
         super();
     }
     
+    /**
+     * Intelligently shortens a string to the specified maximum number of
+     * characters. The shortened string will be no longer than the maximum,
+     * including the ellipsis. Examples:
+     * <pre>
+     * truncate("  Already short enough, when trimmed.  ", 35);
+     * // "Already short enough, when trimmed."
+     * 
+     * truncate("My really long string that needs to be cut down to size.", 50);
+     * // "My really long string that needs to be cut down…"
+     * 
+     * truncate("Myreallylongstringthatneedstobecutdowntosize.", 30);
+     * // "Myreallylongstringthatneedsto…"
+     * 
+     * truncate("If we encounter dashes—like this—don't include them.", 35);
+     * // "If we encounter dashes—like this…"
+     * 
+     * truncate(null);
+     * // null
+     * </pre>
+     * In detail, the algorithm is as follows:
+     * <ol>
+     * <li>If {@link #setTrimFirst trimFirst} is {@code true}, trim the leading
+     *     and trailing spaces from the string. (Default is {@code true}).</li>
+     * <li>If {@link #setCompressWhiteSpace compressWhiteSpace} is {@code true},
+     *     remove extra white spaces from the string. (Default is
+     *     {@code true}).</li>
+     * <li>If the trimmed string is now less than or equal to the desired
+     *     maximum length, we're done. Return the trimmed string.</li>
+     * <li>Otherwise, shorten the string while leaving whole words intact
+     *     (see {@link #setBreakWordLongerThan breakWordLongerThan}) and
+     *     append a {@link #setSuffix suffix} at the end. (Default is "…").</li>
+     * </ol>
+     * 
+     * @return {@code null} if the supplied string is {@code null}, the
+     *         trimmed string if it does not exceed the desired maximum length,
+     *         or a truncated version of the string that is less than or
+     *         equal to the desired maximum length.
+     */
     public String truncate(String string, int maxLength)
     {
         if(null == string) return null;
@@ -90,6 +141,11 @@ public class TruncateHelper
         return _suffix;
     }
 
+    /**
+     * Sets the suffix that will be appended to the truncated string, if in
+     * fact the string needs to be shortened. The default is "…" (the
+     * ellipsis character).
+     */
     public TruncateHelper setSuffix(String suffix)
     {
         // Treat null as empty string
@@ -104,6 +160,11 @@ public class TruncateHelper
         return _trimFirst;
     }
 
+    /**
+     * Sets whether leading and trailing white space should be removed from
+     * the string before its length is tested and it is truncated.
+     * The default is {@code true}.
+     */
     public TruncateHelper setTrimFirst(boolean trimFirst)
     {
         this._trimFirst = trimFirst;
@@ -115,6 +176,14 @@ public class TruncateHelper
         return _compressWhiteSpace;
     }
 
+    /**
+     * Sets whether extra white space characters are reduced to a single
+     * space character before the string's length is tested and the string
+     * is truncated. For example, two space characters between sentences
+     * would be reduced to one space. This is usually desired when targeting
+     * the web, since extra white space is ignored by default during HTML
+     * rendering. The default is {@code true}.
+     */
     public TruncateHelper setCompressWhiteSpace(boolean compressWhiteSpace)
     {
         this._compressWhiteSpace = compressWhiteSpace;
@@ -126,6 +195,32 @@ public class TruncateHelper
         return _breakWordLongerThan;
     }
 
+    /**
+     * Sets the maximum word length that is required to remain intact. The
+     * truncation algorithm will do its best to leave words intact and only
+     * put the ellipsis (or other suffix) at the end of a word. However if the
+     * string contains a very long sequence of characters with no spaces, it
+     * may be preferable to show as much of the sequence as possible, rather
+     * than omitting that word entirely. For example:
+     * <pre>
+     * truncate("A string containing the word Antidisestablishmentarianism.", 50)
+     * </pre>
+     * will produce:
+     * <pre>
+     * A string containing the word Antidisestablishment…
+     * </pre>
+     * because "Antidisestablishmentarianism" is longer that the
+     * {@code breakWordLongerThan} limit. If this limit is set to
+     * {@code -1} (no limit), the result would be:
+     * <pre>
+     * A string containing the word…
+     * </pre>
+     * because the algorithm will not break apart the word. Note that as a
+     * result the truncated string is much shorter than the desired maximum
+     * 50 characters.
+     * <p>
+     * The default {@code breakWordLongerThan} limit is 10 characters.
+     */
     public TruncateHelper setBreakWordLongerThan(int breakWordLongerThan)
     {
         this._breakWordLongerThan = breakWordLongerThan;
@@ -137,6 +232,11 @@ public class TruncateHelper
         return _wordPattern;
     }
 
+    /**
+     * Sets the regular expression that matches word characters. The default
+     * is any non-space character except hyphen, en dash and em dash:
+     * {@code [^\s\-–—]}.
+     */
     public TruncateHelper setWordPattern(Pattern wordPattern)
     {
         Assert.notNull(wordPattern);
@@ -149,6 +249,11 @@ public class TruncateHelper
         return _wordDelimeterPattern;
     }
 
+    /**
+     * Sets the regular expression that matches non-word characters (i.e. the
+     * delimiters between words). The default is the inverse of the default
+     * {@code wordPattern}: {@code [\s\-–—]}.
+     */
     public TruncateHelper setWordDelimeterPattern(Pattern wordDelimeterPattern)
     {
         Assert.notNull(wordDelimeterPattern);

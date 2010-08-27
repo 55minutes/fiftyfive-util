@@ -99,4 +99,20 @@ public class TruncateHelperTest
             _helper.truncate(s, 34)
         );
     }
+    
+    @Test
+    public void testTruncate_trim()
+    {
+        String s = "  Already short enough, when trimmed.  ";
+        Assert.assertEquals(
+            "Already short enough, when trimmed.",
+            _helper.truncate(s, 35)
+        );
+    }
+
+    @Test
+    public void testTruncate_null()
+    {
+        Assert.assertEquals(null, _helper.truncate(null, 35));
+    }
 }
