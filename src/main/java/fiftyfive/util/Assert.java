@@ -42,6 +42,21 @@ public class Assert
     }
     
     /**
+     * Asserts that the given condition is {@code false}.
+     * 
+     * @throws IllegalArgumentException with {@code message} if
+     *         {@code condition} is {@code true}.
+     */
+    public static void isFalse(boolean condition, String message)
+        throws IllegalArgumentException
+    {
+        if(condition)
+        {
+            throw new IllegalArgumentException(message);
+        }
+    }
+    
+    /**
      * Asserts that the given object is not {@code null}.
      * 
      * @throws IllegalArgumentException with the message

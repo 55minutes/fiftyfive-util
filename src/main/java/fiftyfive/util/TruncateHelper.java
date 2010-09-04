@@ -119,8 +119,7 @@ public class TruncateHelper
         }
         
         Pattern patt = Pattern.compile(String.format(
-            "(?s)^%s(.{%d,%d}%s)%s.*",
-            _trimFirst ? "\\s*" : "",
+            "(?s)^(.{%d,%d}%s)%s.*",
             minCapture,
             maxCapture,
             _wordPattern,
@@ -131,7 +130,7 @@ public class TruncateHelper
         {
             return string.substring(0, match.end(1)) + _suffix;
         }
-        return string.substring(0, maxLength - 1) + _suffix;
+        return string.substring(0, maxLength - _suffix.length()) + _suffix;
     }
     
     // Properties
