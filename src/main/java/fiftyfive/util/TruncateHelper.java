@@ -38,7 +38,7 @@ public class TruncateHelper
     private Pattern _wordDelimeterPattern = Pattern.compile("[\\s\\-–—]");
     
     /**
-     * Constructs a TruncateHelper with a reasonable set of defaults:
+     * Constructs a TruncateHelper with a reasonable set of defaults.
      * <pre class="example">
      * suffix = "…"
      * trimFirst = true
@@ -46,7 +46,6 @@ public class TruncateHelper
      * breakWordLongerThan = 10
      * wordPattern = [^\s\-–—]
      * wordDelimeterPattern = [\s\-–—]</pre>
-     * 
      */
     public TruncateHelper()
     {
@@ -72,7 +71,7 @@ public class TruncateHelper
      * 
      * truncate(null);
      * // null</pre>
-     * 
+     * <p>
      * In detail, the algorithm is as follows:
      * <ol>
      * <li>If {@link #setTrimFirst trimFirst} is {@code true}, trim the leading
@@ -203,17 +202,17 @@ public class TruncateHelper
      * than omitting that word entirely. For example:
      * <pre class="example">
      * truncate("A string containing the word Antidisestablishmentarianism.", 50)</pre>
-     * 
+     * <p>
      * will produce:
      * <pre class="example">
      * A string containing the word Antidisestablishment…</pre>
-     * 
+     * <p>
      * because "Antidisestablishmentarianism" is longer that the
      * {@code breakWordLongerThan} limit. If this limit is set to
      * {@code -1} (no limit), the result would be:
      * <pre class="example">
      * A string containing the word…</pre>
-     * 
+     * <p>
      * because the algorithm will not break apart the word. Note that as a
      * result the truncated string is much shorter than the desired maximum
      * 50 characters.
