@@ -32,16 +32,16 @@ import javax.servlet.ServletContext;
  * printing version information in an application for QA purposes.
  * <p>
  * Usage:
- * <pre>
+ * <pre class="example">
  * Version v = Version.ofJar(MyApplication.class);
  * v.getVersion() // "1.0"
  * v.getModifiedDate() // Wed Feb 25 13:51:35 PST 2009
- * v.getHudsonBuildNumber() // 34 (assuming built with Hudson)
- * </pre>
+ * v.getHudsonBuildNumber() // 34 (assuming built with Hudson)</pre>
+ * <p>
  * For this to work, the version number needs to be included in the JAR
  * metadata. Maven will do this for you, but you must add the following
  * snippet to your POM:
- * <pre>
+ * <pre class="example">
  * &lt;build&gt;
  *   &lt;plugins&gt;
  *     &lt;plugin&gt;
@@ -58,8 +58,8 @@ import javax.servlet.ServletContext;
  *       &lt;/configuration&gt;
  *     &lt;/plugin&gt;
  *   &lt;/plugins&gt;
- * &lt;/build&gt;
- * </pre>
+ * &lt;/build&gt;</pre>
+ * <p>
  * In a WAR project, use the same snippet, except replace
  * <code>maven-jar-plugin</code> with <code>maven-war-plugin</code>.
  *

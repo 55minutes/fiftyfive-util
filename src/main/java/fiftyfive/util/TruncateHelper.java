@@ -22,10 +22,10 @@ import java.util.regex.Pattern;
 /**
  * Truncates strings using a configurable set of rules. For a reasonable
  * default ruleset, use the empty constructor:
- * <pre>
+ * <pre class="example">
  * new TruncateHelper().truncate("My really long string that needs to be cut down to size.", 50);
- * // Result: "My really long string that needs to be cut down…"
- * </pre>
+ * // Result: "My really long string that needs to be cut down…"</pre>
+ * 
  * @see #truncate
  */
 public class TruncateHelper
@@ -39,14 +39,14 @@ public class TruncateHelper
     
     /**
      * Constructs a TruncateHelper with a reasonable set of defaults:
-     * <pre>
+     * <pre class="example">
      * suffix = "…"
      * trimFirst = true
      * compressWhiteSpace = true
      * breakWordLongerThan = 10
      * wordPattern = [^\s\-–—]
-     * wordDelimeterPattern = [\s\-–—]
-     * </pre>
+     * wordDelimeterPattern = [\s\-–—]</pre>
+     * 
      */
     public TruncateHelper()
     {
@@ -57,7 +57,7 @@ public class TruncateHelper
      * Intelligently shortens a string to the specified maximum number of
      * characters. The shortened string will be no longer than the maximum,
      * including the ellipsis. Examples:
-     * <pre>
+     * <pre class="example">
      * truncate("  Already short enough, when trimmed.  ", 35);
      * // "Already short enough, when trimmed."
      * 
@@ -71,8 +71,8 @@ public class TruncateHelper
      * // "If we encounter dashes—like this…"
      * 
      * truncate(null);
-     * // null
-     * </pre>
+     * // null</pre>
+     * 
      * In detail, the algorithm is as follows:
      * <ol>
      * <li>If {@link #setTrimFirst trimFirst} is {@code true}, trim the leading
@@ -201,19 +201,19 @@ public class TruncateHelper
      * string contains a very long sequence of characters with no spaces, it
      * may be preferable to show as much of the sequence as possible, rather
      * than omitting that word entirely. For example:
-     * <pre>
-     * truncate("A string containing the word Antidisestablishmentarianism.", 50)
-     * </pre>
+     * <pre class="example">
+     * truncate("A string containing the word Antidisestablishmentarianism.", 50)</pre>
+     * 
      * will produce:
-     * <pre>
-     * A string containing the word Antidisestablishment…
-     * </pre>
+     * <pre class="example">
+     * A string containing the word Antidisestablishment…</pre>
+     * 
      * because "Antidisestablishmentarianism" is longer that the
      * {@code breakWordLongerThan} limit. If this limit is set to
      * {@code -1} (no limit), the result would be:
-     * <pre>
-     * A string containing the word…
-     * </pre>
+     * <pre class="example">
+     * A string containing the word…</pre>
+     * 
      * because the algorithm will not break apart the word. Note that as a
      * result the truncated string is much shorter than the desired maximum
      * 50 characters.

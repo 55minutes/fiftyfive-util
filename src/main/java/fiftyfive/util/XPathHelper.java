@@ -37,10 +37,9 @@ import org.xml.sax.SAXException;
 
 /**
  * Simplifies access to the Java XPath API.
- * <pre>
+ * <pre class="example">
  * File file = new File("test.xml");
- * String name = XPathHelper.parse(file).findString("//name/text()");
- * </pre>
+ * String name = XPathHelper.parse(file).findString("//name/text()");</pre>
  */
 public class XPathHelper
 {
