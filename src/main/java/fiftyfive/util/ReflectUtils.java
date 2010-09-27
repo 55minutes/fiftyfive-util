@@ -16,9 +16,9 @@
 
 package fiftyfive.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 /**
  * Helpers for reflection tasks used internally by the 55 Minutes
@@ -103,7 +103,77 @@ public class ReflectUtils
         }
         throw new RuntimeException(cause);
     }
+
+    /**
+     * Returns a field with the given name from the specified class.
+     *
+     * @throws IllegalArgumentException if no matching field could be found
+     */
+    public static Field getField(Class cls, String fieldName)
+    {
+        Assert.notNull(cls, "cls cannot be null");
+        Assert.notNull(fieldName, "fieldName cannot be null");
+        
+        // First check for public field using getField()
+        Field field = null;
+        try
+        {
+            field = cls.getField(fieldName);
+        }
+        catch(NoSuchFieldException ignore) {}
+        
+        // If that fails, use getDeclaredField() going up the class hierarchy
+        Class sup = cls;
+        while(null == field && sup != null)
+        {
+            try
+            {
+                field = sup.getDeclaredField(fieldName);
+            }
+            catch(NoSuchFieldException ignore) {}
+            sup = sup.getSuperclass();
+        }
+        
+        // Last resort: throw IllegalArgumentException
+        if(field == null)
+        {
+            throw new IllegalArgumentException(
+                "Cannot find \"" + fieldName + "\" method on : " + cls
+            );
+        }
+        return field;
+    }
     
+    /**
+     * Reads the specified field from the given bean. The field must exist,
+     * but can be private.
+     * @return The value of the field
+     * @throws IllegalArgumentException if the field does not exist
+     * @throws RuntimeException if reflection otherwise fails
+     */
+    public static Object readField(Object bean, String fieldName)
+    {
+        Field field = getField(bean.getClass(), fieldName);
+
+        // Ensure we can access even if field or class is not public
+        field.setAccessible(true);
+
+        Throwable cause = null;
+        try
+        {
+            return field.get(bean);
+        }
+        catch(Exception e)
+        {
+            cause = e;
+        }
+        if(cause instanceof RuntimeException)
+        {
+            throw (RuntimeException) cause;
+        }
+        throw new RuntimeException(cause);
+    }
+
     /**
      * This class is not meant to be constructed.
      */
