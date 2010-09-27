@@ -57,8 +57,62 @@ public class ReflectUtilsTest
         ReflectUtils.invokeZeroArgMethod(new Bean(), "exceptionalMethod");
     }
 
+    @Test(expected=IllegalArgumentException.class)
+    public void testReadField_dne()
+    {
+        ReflectUtils.readField(new Bean(), "doesnotexist");
+    }
+
+    @Test
+    public void testReadField_private()
+    {
+        Assert.assertEquals(
+            "private",
+            ReflectUtils.readField(new Bean(), "_field1")
+        );
+    }
+
+    @Test
+    public void testReadField_default()
+    {
+        Assert.assertEquals(
+            "default",
+            ReflectUtils.readField(new Bean(), "_field2")
+        );
+    }
+
+    @Test
+    public void testReadField_protected()
+    {
+        Assert.assertEquals(
+            "protected",
+            ReflectUtils.readField(new Bean(), "_field3")
+        );
+    }
+
+    @Test
+    public void testReadField_public()
+    {
+        Assert.assertEquals(
+            "public",
+            ReflectUtils.readField(new Bean(), "_field4")
+        );
+    }
+
+    @Test
+    public void testReadField_null()
+    {
+        Assert.assertNull(ReflectUtils.readField(new Bean(), "_field5"));
+    }
+
     private static class Bean
     {
+        private String _field1 = "private";
+        String _field2 = "default";
+        protected String _field3 = "protected";
+        public String _field4 = "public";
+        private String _field5;
+        
         public void voidMethod()
         {
         }
