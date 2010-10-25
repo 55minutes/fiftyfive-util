@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * 
  * @see #truncate
  */
-public class TruncateHelper
+public class TruncateHelper implements java.io.Serializable
 {
     private String _suffix = "…";
     private boolean _trimFirst = true;
