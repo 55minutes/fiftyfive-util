@@ -110,13 +110,10 @@
       <plugin>
         <groupId>com.mycila.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
-        <version>1.8.0</version>
+        <version>1.9.0</version>
         <configuration>
           <header>${basedir}/etc/header.txt</header>
           <failIfMissing>true</failIfMissing>
-          <properties>
-            <year>2010</year>
-          </properties>
           <useDefaultExcludes>true</useDefaultExcludes>
           <includes>
             <include>pom.xml</include>
