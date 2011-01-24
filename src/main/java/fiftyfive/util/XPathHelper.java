@@ -26,6 +26,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.XPathFactoryConfigurationException;
 import static javax.xml.xpath.XPathConstants.NODESET;
 import static javax.xml.xpath.XPathConstants.STRING;
 
@@ -148,6 +149,28 @@ public class XPathHelper
     {
         return (NodeList) evaluateXPath(expr, NODESET);
     }
+    
+    /**
+     * Creates and returns a new instance of XPathFactory. Override this
+     * method if you wish to use a custom implementation (i.e. other than
+     * the one that ships with the JRE).
+     */
+    protected XPathFactory newFactory()
+        throws XPathFactoryConfigurationException
+    {
+        // First try to force the default JRE impl
+        try
+        {
+            return XPathFactory.newInstance(
+                XPathFactory.DEFAULT_OBJECT_MODEL_URI,
+                "com.sun.org.apache.xpath.internal.jaxp.XPathFactoryImpl",
+                null);
+        }
+        catch(XPathFactoryConfigurationException ignore) {}
+        
+        // If that failed use auto-discovery
+        return XPathFactory.newInstance();
+    }
 
     /**
      * Evaluates the given xpath expression and returns the result as the
@@ -157,7 +180,13 @@ public class XPathHelper
     private Object evaluateXPath(String expr, QName type)
             throws XPathExpressionException
     {
-        XPathFactory factory = XPathFactory.newInstance();
-        return factory.newXPath().evaluate(expr, _node, type);
+        try
+        {
+            return newFactory().newXPath().evaluate(expr, _node, type);
+        }
+        catch(XPathFactoryConfigurationException xpfce)
+        {
+            throw new RuntimeException(xpfce);
+        }
     }
 }
