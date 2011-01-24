@@ -151,9 +151,10 @@ public class XPathHelper
     }
     
     /**
-     * Creates and returns a new instance of XPathFactory. Override this
-     * method if you wish to use a custom implementation (i.e. other than
-     * the one that ships with the JRE).
+     * Creates and returns a new instance of XPathFactory. Attempts to use
+     * the standard JRE implementation:
+     * {@code com.sun.org.apache.xpath.internal.jaxp.XPathFactoryImpl}.
+     * Override this method if you wish to specify a different implementation.
      */
     protected XPathFactory newFactory()
         throws XPathFactoryConfigurationException
