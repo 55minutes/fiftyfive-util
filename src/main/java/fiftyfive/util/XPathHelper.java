@@ -20,13 +20,16 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPathFactoryConfigurationException;
+
 import static javax.xml.xpath.XPathConstants.NODESET;
 import static javax.xml.xpath.XPathConstants.STRING;
 
@@ -34,6 +37,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
 
 /**
  * Simplifies access to the Java XPath API.
@@ -90,16 +94,27 @@ public class XPathHelper
     }
     
     private Node _node;
+    private XPath _xpath;
     
     /**
      * Creates an XPathHelper from a DOM that has already been parsed.
      * It is usually more convenient to use the static {@code parse} methods.
      * @see #parse(File)
      * @see #parse(InputSource)
+     * 
+     * @throws RuntimeException if the Java XPath infrastructure can't be initialized
      */
     public XPathHelper(Node node)
     {
         _node = node;
+        try
+        {
+            _xpath = newFactory().newXPath();
+        }
+        catch(XPathFactoryConfigurationException xpfce)
+        {
+            throw new RuntimeException(xpfce);
+        }
     }
     
     /**
@@ -181,13 +196,6 @@ public class XPathHelper
     private Object evaluateXPath(String expr, QName type)
             throws XPathExpressionException
     {
-        try
-        {
-            return newFactory().newXPath().evaluate(expr, _node, type);
-        }
-        catch(XPathFactoryConfigurationException xpfce)
-        {
-            throw new RuntimeException(xpfce);
-        }
+        return _xpath.evaluate(expr, _node, type);
     }
 }
