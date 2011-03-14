@@ -171,6 +171,7 @@
         <version>2.7</version>
         <configuration>
           <encoding>utf-8</encoding>
+          <stylesheetfile>${basedir}/etc/javadoc/stylesheets/screen.css</stylesheetfile>
         </configuration>
         <executions>
           <execution>
