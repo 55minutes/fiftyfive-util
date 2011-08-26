@@ -106,6 +106,14 @@
   <!-- ==================================================================== -->
 
   <build>
+    <extensions>
+      <!-- Enables mvn deploy with scpexe:// target -->
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh-external</artifactId>
+        <version>1.0</version>
+      </extension>
+    </extensions>
     <plugins>
       <plugin>
         <groupId>com.mycila.maven-license-plugin</groupId>
@@ -228,19 +236,6 @@
       </plugin>
     </plugins>
   </reporting>
-
-
-  <!-- ==================================================================== -->
-  <!-- Deployment Configuration                                             -->
-  <!-- ==================================================================== -->
-
-  <distributionManagement>
-    <repository>
-      <id>fiftyfive-internal</id>
-      <name>55 Minutes Maven Repository</name>
-      <url>https://internal.55minutes.com/archiva/repository/fiftyfive-opensource/</url>
-    </repository>
-  </distributionManagement>
 
 
 </project>
