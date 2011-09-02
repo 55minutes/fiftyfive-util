@@ -19,7 +19,7 @@ package fiftyfive.util;
  * Methods for doing common sanity checks, throwing IllegalArgumentException
  * or IllegalStateException on failure. Many third-party libraries provide
  * this functionality; if your project already depends on them, consider
- * <a href="http://commons.apache.org/lang/api-release/org/apache/commons/lang/Validate.html">commons-lang Validate</a>
+ * <a href="http://commons.apache.org/lang/api/org/apache/commons/lang3/Validate.html">commons-lang Validate</a>
  * or
  * <a href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/util/Assert.html">Spring Framework Assert</a>.
  */
